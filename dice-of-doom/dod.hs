@@ -10,12 +10,12 @@ import Data.List (findIndices)
 import Data.List.Split (chunksOf)
 import System.Random
 
-type Player = Char
-type Dice = Int
-type Index = Int
+type Player   = Char
+type Dice     = Int
+type Index    = Int
 type Position = (Player, Dice)
-type Board = [Position]
-type Move =  (Index, [Index])
+type Board    = [Position]
+type Move     = (Index, [Index])
 
 data Game = Game {
               size :: Int,
@@ -27,8 +27,6 @@ data Game = Game {
 -----------------------------------------
 -- instances
 -----------------------------------------
---instance Show Position where
---    show (p, d) = show p ++ "-" ++ show d
 
 instance Random Position where
     randomR ((ap, ad), (bp, bd)) g = ((pl, dl), g'')
@@ -43,9 +41,9 @@ buildGame :: Int -> Int -> Int -> IO Game
 buildGame s p m = do
     (plrs, brd) <- createBoard s p m
     return Game {
-                size=s,
-                players = plrs, 
-                board = brd,
+                size    = s,
+                players = plrs,
+                board   = brd,
                 current = 0
            }
 
@@ -76,8 +74,8 @@ availableMove g inx = lowerP
 
 neighbor :: Game -> Index -> [Index]
 neighbor g inx = filter ((&&) <$> (>=0) <*> (<mx*mx)) neigh
-  where mx = size g
-        col = mod inx mx
+  where mx    = size g
+        col   = mod inx mx
         neigh = [inx-mx, inx+mx] ++
           (if col == 0 then [] else [inx-1, inx+mx-1]) ++    -- left edge
           (if col == (mx-1) then [] else [inx+1, inx-mx+1]) -- right edge
@@ -86,8 +84,8 @@ moveDices :: Game -> Index -> Index -> Game
 moveDices g f t = g { board = toB }
   where (fp, fd) = board g !! f
         (tp, td) = board g !! t
-        frB = updateList (board g) f (fp, 1)
-        toB = updateList frB t (fp, fd-1)
+        frB      = updateList (board g) f (fp, 1)
+        toB      = updateList frB t (fp, fd-1)
 
 updateList :: [a] -> Int -> a -> [a]
 updateList xs inx nv = f ++ (nv:tail b)
@@ -123,13 +121,13 @@ nextStep game = do
     let moves = availableMoves game  
         brd   = board game
         sz    = size game
+        pl    = players game !! current game
     putStrLn $ printBoard sz brd
-    putStrLn ""
+    putStrLn $ "Player " ++ show pl
     (f, t) <- printAvailMove moves
     putStrLn $ "Moving dices from " ++ show f ++ " to " ++ show t
     let mGame = moveDices game f t
-    nextStep $ mGame { current = current mGame + 1 `mod` (length . players $ mGame) }
-
+    nextStep $ mGame { current = (current mGame + 1) `mod` (length . players $ mGame) }
 
 
 main :: IO ()
