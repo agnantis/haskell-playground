@@ -40,11 +40,11 @@ prop2_minfreeNaive n | n < 0     = True
 testminfreeArray :: Assertion
 testminfreeArray = minfreeArray [] @?= 0
 
-testminfreeNaive2' :: Assertion
-testminfreeNaive2' = minfreeArray testList @?= 15
+testminfreeArray2 :: Assertion
+testminfreeArray2 = minfreeArray testList @?= 15
 
-testminfreeNaive3' :: Assertion
-testminfreeNaive3' = minfreeArray (testListLarge largeNumber) @?= largeNumber+1
+testminfreeArray3 :: Assertion
+testminfreeArray3 = minfreeArray (testListLarge largeNumber) @?= largeNumber+1
 
 prop1_minfreeArray :: [Int] -> Bool
 prop1_minfreeArray xs = not $ elem res xs
@@ -61,8 +61,8 @@ testminfreeDnCArray = minfreeDnC [] @?= 0
 testminfreeDnCArray2 :: Assertion
 testminfreeDnCArray2 = minfreeDnC testList1 @?= 15
 
-testminfreeNaive3'' :: Assertion
-testminfreeNaive3'' = minfreeDnC (testListLarge largeNumber) @?= largeNumber+1
+testminfreeDnCArray3 :: Assertion
+testminfreeDnCArray3 = minfreeDnC (testListLarge largeNumber) @?= largeNumber+1
 
 prop1_minfreeDnC :: [Int] -> Bool
 prop1_minfreeDnC xs = not $ elem res xs
@@ -101,25 +101,25 @@ testNaive = testGroup "minfreeNaive tests - naive approach"
   ]
 
 testArray :: TestTree
-testArray = testGroup "minfreeArray tests - array approach"
+testArray = testGroup "minfree tests - array approach"
   [ testCase "empty list should return 0" testminfreeArray
-  , testCase "not empty list should return a value" testminfreeNaive2'
-  , testCase "[0..n] ++ [n+2..] == n+1" testminfreeNaive3'
+  , testCase "not empty list should return a value" testminfreeArray2
+  , testCase "[0..n] ++ [n+2..] == n+1" testminfreeArray3
   , testProperty "result should not exist in input list" prop1_minfreeArray
   , testProperty "result for [0..n] == n+1" prop2_minfreeArray 
   ]
 
 testDnC :: TestTree
-testDnC = testGroup "minfreeDnC tests - divide approach"
+testDnC = testGroup "minfree tests - divide approach"
   [ testCase "empty list should return 0" testminfreeDnCArray
   , testCase "not empty list should return a value" testminfreeDnCArray2
-  , testCase "[0..n] ++ [n+2..] == n+1" testminfreeNaive3''
+  , testCase "[0..n] ++ [n+2..] == n+1" testminfreeDnCArray3
   --, testProperty "result should not exist in input list" prop1_minfreeDnC 
   , testProperty "result for [0..n] == n+1" prop2_minfreeDnC 
   ]
 
 testSTArray :: TestTree
-testSTArray = testGroup "minfreeNaive tests - ST Arrays"
+testSTArray = testGroup "minfree tests - ST Arrays"
   [ testCase "empty list should return 0" testminfreeSTArray
   , testCase "not empty list should return a value" testminfreeSTArray2
   , testCase "[0..n] ++ [n+2..] == n+1" testminfreeSTArray3
