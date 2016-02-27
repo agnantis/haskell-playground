@@ -1,0 +1,15 @@
+name:                PipesTut
+version:             0.1.0.0
+license-file:        LICENSE
+author:              Kostas Agnantis
+maintainer:          kagnadis@gmail.com
+build-type:          Simple
+extra-source-files:  README.md
+cabal-version:       >=1.10
+
+executable PipesTut
+  main-is:             Main.hs
+  build-depends:       base >=4.6 && <4.7,
+                       pipes
+  default-language:    Haskell2010
+  
